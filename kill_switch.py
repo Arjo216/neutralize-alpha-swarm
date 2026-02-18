@@ -1,70 +1,63 @@
 # ==========================================
-# 🦅 NEUTRALIZE ALPHA: TACTICAL CONSOLE (v3.0)
+# 🦅 SWARM COMMANDER: CITY OPS (LIDAR)
 # ==========================================
 import asyncio
 import websockets
 import time
-import sys
 
-# ⚠️ PASTE YOUR LATEST CLOUDFLARE URL HERE
-# Example: "wss://orange-music-...trycloudflare.com"
-URL = "wss://tribunal-rna-phases-searches.trycloudflare.com"
+URL = "wss://governance-knives-reunion-situation.trycloudflare.com"
+
+async def listen_to_radar(ws):
+    try:
+        async for message in ws:
+            if isinstance(message, str):
+                if "RADAR_ALERT" in message:
+                    coords = message.split(":")[1].strip()
+                    print(f"\n🚨 TARGET ACQUIRED AT [{coords}] - READY STRIKE [S] 🚨")
+                    print("COMMAND >> ", end="", flush=True)
+                elif "LIDAR_WARNING" in message:
+                    # 🛡️ COLLISION ALERT 🛡️
+                    print(f"\n⚠️ OBSTACLE DETECTED! AUTONOMOUS BRAKING ENGAGED ⚠️")
+                    print("COMMAND >> ", end="", flush=True)
+    except Exception: pass 
 
 async def tactical_console():
-    print(f"\n🔍 SCANNING UPLINK: {URL}...")
-    
+    print(f"\n🔍 CONNECTING TO URBAN SWARM: {URL}...")
     while True:
         try:
-            async with websockets.connect(URL) as ws:
-                print("✅ UPLINK ESTABLISHED.")
-                print("   (Latency: <50ms)\n")
-                
-                print("========================================")
-                print("   🦅 NEUTRALIZE COMMAND INTERFACE")
-                print("========================================")
-                print("   [ E ]  ENGAGE TARGET  (Weapons Free)")
-                print("   [ A ]  ABORT MISSION  (Return to Base)")
-                print("   [ Q ]  QUIT CONSOLE   (Close Link)")
+            async with websockets.connect(URL, subprotocols=["foxglove.websocket.v1"], ping_interval=10, ping_timeout=10) as ws:
+                print("✅ UPLINK SECURED.\n")
+                print("   [ F ] TAKEOFF")
+                print("   [ V ] EVASIVE")
+                print("   [ S ] STRIKE")
+                print("   [ W,A,S,D ] FLY ALPHA")
+                print("   (LIDAR ACTIVE: Will auto-brake on obstacles)")
                 print("========================================\n")
                 
+                radar_task = asyncio.create_task(listen_to_radar(ws))
+                
                 while True:
-                    # 1. Get Input
-                    cmd = input("COMMAND >> ").strip().upper()
+                    cmd = await asyncio.to_thread(input, "COMMAND >> ")
+                    cmd = cmd.strip().upper()
                     
-                    # 2. Process & Send
-                    if cmd == "E":
-                        print("   🚀 SENDING [ENGAGE]...", end=" ")
-                        start = time.time()
-                        await ws.send("ENGAGE")
-                        ping = (time.time() - start) * 1000
-                        print(f"✅ CONFIRMED ({ping:.0f}ms)")
-                        
-                    elif cmd == "A":
-                        print("   🛑 SENDING [ABORT]...", end=" ")
-                        start = time.time()
-                        await ws.send("ABORT")
-                        ping = (time.time() - start) * 1000
-                        print(f"✅ CONFIRMED ({ping:.0f}ms)")
-                        
-                    elif cmd == "Q":
-                        print("   🔌 TERMINATING UPLINK.")
-                        return
+                    if cmd == "F": await ws.send("FORMATION"); print("   📐 SENT: RESET")
+                    elif cmd == "V": await ws.send("EVASIVE"); print("   🌪️ SENT: EVASIVE")
+                    elif cmd == "S": await ws.send("STRIKE"); print("   🎯 SENT: STRIKE")
+                    elif cmd == "A": await ws.send("ABORT"); print("   🛑 SENT: ABORT")
+                    elif cmd == "Q": return
+                    elif any(char in "WSADRC" for char in cmd):
+                        clean_cmd = "".join([c for c in cmd if c in "WSADRC"])
+                        if clean_cmd:
+                            await ws.send(f"MOVE_{clean_cmd}")
+                            print(f"   🚁 SENT: MOVE [{clean_cmd}]")
+                    elif cmd != "": print("   ❌ UNKNOWN COMMAND")
                     
-                    else:
-                        print("   ❌ INVALID OPTION.")
-                        
-        except (websockets.exceptions.ConnectionClosed, ConnectionRefusedError):
-            print("\n⚠️ CONNECTION LOST. RECONNECTING IN 3s...")
+                radar_task.cancel() 
+                
+        except Exception as e:
+            print(f"\n⚠️ LINK LOST. Retrying in 3 seconds...")
             time.sleep(3)
-        except KeyboardInterrupt:
-            print("\n👋 OPERATOR DISCONNECTED.")
-            sys.exit()
 
 if __name__ == "__main__":
-    if "paste-your-url-here" in URL:
-        print("❌ ERROR: You forgot to paste the Cloudflare URL in the script!")
-    else:
-        try:
-            asyncio.run(tactical_console())
-        except KeyboardInterrupt:
-            pass
+    try: asyncio.run(tactical_console())
+    except KeyboardInterrupt: pass
