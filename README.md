@@ -66,7 +66,7 @@ The architecture is divided into two distinct environments communicating via sec
 
 4. Extract the secure wss://...trycloudflare.com URL from the terminal uplink logs.
 
-Step 2: Boot the Command Center (Local)
+### Step 2: Boot the Command Center (Local)
 Clone this repository and access the React dashboard:
 
 Bash
@@ -79,20 +79,22 @@ npm install
 npm run dev
 Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure handshake.
 
-🎮 COMMAND MATRIX
+
+### 🎮 COMMAND MATRIX Tactical Controls (CLI)
+
 The tactical dashboard supports complete Human-in-the-Loop oversight.
 
-📐 FORMATION V: Swarm locks into a synchronized V-formation and hovers at Z=5.
+| Command | Action | Description |
+| :--- | :--- | :--- |
+| `[ 📐 FORMATION V ]` | *Formation* | Swarm locks into a synchronized V-formation and hovers at Z=5. |
+| `[ 🌪️ EVASIVE ]` | *Evasive* | Injects randomized movement vectors to scatter the swarm and dodge incoming hostile fire. |
+| `[ 🚀 AUTOPILOT ]` | *Autonomous Nav*| Engages the A* algorithm. The path is visually drawn in the 3D grid, and the swarm navigates to the target X/Y coordinates. |
+| `[ 🎯 STRIKE TARGET ]`| *AI Intercept* | Disengages the P-D math and activates the PyTorch Neural Network to autonomously hunt and ram the hostile target. |
+| `[ 🛑 ABORT / RTB ]` | *Halt / Refuel* | Swarm cuts engines, returns to a holding pattern, and rapidly replenishes the Fuel Gauge. |
+| `[ W, A, S, D ]` | *Translate* | Manual override to fly the Alpha drone Forward/Left/Back/Right. |
+| `[ R, C ]` | *Altitude* | Rise (Ascend) or Crouch (Descend) the swarm via manual override. |
 
-🌪️ EVASIVE: Injects randomized movement vectors to scatter the swarm and dodge incoming hostile fire.
-
-🚀 AUTOPILOT: Engages the A* algorithm. The path is visually drawn in the 3D grid, and the swarm navigates to the target X/Y coordinates.
-
-🎯 STRIKE TARGET: Disengages the P-D math and activates the PyTorch AI to hunt and ram the hostile target.
-
-🛑 ABORT / RTB: Swarm cuts engines, returns to holding pattern, and rapidly replenishes the Fuel Gauge.
-
-🕹️ MANUAL OVERRIDE: Dedicated W, A, S, D (Translate) and R, C (Altitude) override buttons for direct Alpha drone piloting.
+*Note: Movement commands can be chained for burst maneuvers (e.g., `WWWD` moves 6m forward, 2m right).*
 
 <div align="center">
 <i>"Dominate the airspace. Neutralize the threat."</i>
