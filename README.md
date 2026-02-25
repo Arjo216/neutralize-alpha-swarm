@@ -70,13 +70,16 @@ The architecture is divided into two distinct environments communicating via sec
 1. Clone this repository and access the React dashboard:
 
    Bash
-   git clone [https://github.com/YOUR-USERNAME/neutralize-alpha.git](https://github.com/YOUR-USERNAME/neutralize-alpha.git)
    
+   git clone [https://https://github.com/Arjo216/neutralize-alpha-swarm](https://https://github.com/Arjo216/neutralize-alpha-swarm)
+
    cd neutralize-alpha/swarm-dashboard
 2. Install Node dependencies and launch:
 
    Bash
+
    npm install
+
    npm run dev
 3. Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure         handshake.
 
