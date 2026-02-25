@@ -5,7 +5,7 @@ import asyncio
 import websockets
 import time
 
-URL = "wss://governance-knives-reunion-situation.trycloudflare.com"
+URL = "wss://muze-obj-adjacent-unwrap.trycloudflare.com"
 
 async def listen_to_radar(ws):
     try:

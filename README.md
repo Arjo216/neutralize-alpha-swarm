@@ -1,35 +1,75 @@
-# neutralize-alpha-swarm
-JADC2-aligned Autonomous Swarm Defense Grid with OODA Loop Protocols and Human-in-the-Loop Safeguards.
+# 🦅 NEUTRALIZE ALPHA: Autonomous Drone Swarm Command
 
-# 🦅 Autonomous Swarm Command & Control (C2) Simulator
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![React](https://img.shields.io/badge/React-18.2-61DAFB.svg)
+![PyBullet](https://img.shields.io/badge/Physics-PyBullet-FF6F00.svg)
+![PyTorch](https://img.shields.io/badge/AI-Stable%20Baselines%203-EE4C2C.svg)
+![WebSockets](https://img.shields.io/badge/Network-WebSockets-black.svg)
 
-A real-time, bidirectional Command and Control (C2) architecture for simulated drone swarms. This project integrates a headless 3D physics engine, an encrypted network tunnel, a custom binary telemetry protocol, and an asynchronous tactical CLI to pilot a swarm of autonomous agents through an urban environment.
+**Neutralize Alpha** is a full-stack, real-time autonomous robotics simulation. It integrates a headless physics engine, A* pathfinding, and a Deep Reinforcement Learning (DRL) neural network, all controlled via a secure, dark-mode React tactical dashboard.
 
-## 🚀 Key Features
+## 🚀 Project Overview
 
-* **Custom WebSocket Server:** Implements the `foxglove.websocket.v1` subprotocol to stream high-frequency binary telemetry.
-* **P-D Flight Controller:** Custom Proportional-Derivative physics logic to maintain dynamic V-Formations and execute evasive maneuvers.
-* **Sensor Fusion (Lidar & Radar):** * **Lidar:** Real-time raycasting detects urban obstacles (skyscrapers) and engages autonomous emergency braking to prevent collisions.
-    * **Radar:** Proximity sensors calculate spatial vectors to detect and acquire targets, pushing asynchronous interrupts to the command console.
-* **Visual Payload (FPV):** OpenCV renders a virtual camera mounted to the Alpha drone, encoding the feed into Base64 JPEG for live streaming.
-* **Asynchronous CLI:** A non-blocking Python terminal that allows simultaneous manual flight control (W,A,S,D) and background radar listening without freezing the network heartbeat.
+This project simulates a swarm of 5 quadcopters operating in a dynamically generated 3D urban environment. The swarm is tasked with navigating around obstacles, tracking a hostile AI drone, and executing autonomous strike commands. 
 
-## 🏗️ Architecture
+The backend runs entirely in the cloud (Google Colab) using a headless PyBullet physics engine. It streams high-speed binary telemetry (poses, camera feeds, lidar warnings, and fuel metrics) over a secure Cloudflare WebSocket tunnel directly to a local React.js dashboard and Foxglove Studio for 3D visualization.
 
-1.  **Simulation Engine (Backend):** Hosted on Google Colab using `pybullet` for physics, `cv2` for image processing, and `websockets` for networking.
-2.  **Encrypted Tunnel:** Utilizes Cloudflared to expose the local Colab server to the internet via a secure `wss://` tunnel.
-3.  **Tactical Dashboard (Frontend):** * **Visualizer:** Foxglove Studio renders the `PosesInFrame` 3D grid and `CompressedImage` camera feed.
-    * **Commander Console:** A local Python script (`kill_switch.py`) handles two-way communication and manual overrides.
+## 🧠 System Architecture
 
-## 🎮 Tactical Controls (CLI)
+The architecture is divided into two distinct environments communicating via secure binary payloads:
 
-| Command | Action | Description |
-| :--- | :--- | :--- |
-| `[ F ]` | **Formation V** | Swarm resets and locks into a synchronized V-formation. |
-| `[ V ]` | **Evasive** | Swarm breaks formation and executes random jitter to avoid fire. |
-| `[ S ]` | **Strike** | Swarm executes a kinetic dive-bomb onto the acquired target. |
-| `[ A ]` | **Abort / RTB** | Swarm cuts engines and returns to the ground (Z=0). |
-| `[ W, A, S, D ]` | **Translate** | Manual override to fly the Alpha drone Forward/Left/Back/Right. |
-| `[ R, C ]` | **Altitude** | Rise (Ascend) or Crouch (Descend) the swarm. |
+1. **The Backend Engine (Python / Google Colab)**
+   * **Physics:** PyBullet calculates gravity, thrust, inertia, and raycast (Lidar) collisions at high frequencies.
+   * **Navigation:** A custom A* (A-Star) algorithm routes the swarm through generated skyscrapers.
+   * **Artificial Intelligence:** A Proximal Policy Optimization (PPO) Neural Network trained over 50,000 episodes takes over flight controls during combat to hunt the hostile target.
+   * **Network:** An Asyncio WebSocket server broadcasts real-time JSON and binary telemetry.
 
-*Note: Movement commands can be chained for burst maneuvers (e.g., `WWWD` moves 6m forward, 2m right).*
+2. **The Frontend Command Center (React.js / Foxglove)**
+   * **Tactical UI:** A custom React dashboard processes incoming binary streams to display live coordinates, battery levels, and system alerts.
+   * **3D Visualization:** Foxglove Studio renders the physical PyBullet world, drawing dynamic A* path lines and live camera feeds from the Alpha drone.
+
+## ⚙️ Key Features
+
+* **Real-Time Telemetry:** Live parsing of X/Y/Z coordinates, fuel depletion, and combat states.
+* **A* Pathfinding Autopilot:** Input target coordinates to dynamically generate and follow a collision-free path.
+* **Lidar & Radar Systems:** Automatic emergency braking when facing obstacles and proximity alerts for hostile tracking.
+* **Hostile AI FSM:** The enemy drone utilizes a Finite State Machine (Idle, Evasive, Combat) to dynamically react to the swarm's approach.
+* **Deep RL Neural Link:** Engaging "STRIKE TARGET" disables hardcoded math and hands flight control over to a PyTorch Neural Network for organic target interception.
+
+## 🛠️ Installation & Setup
+
+### 1. The Colab Backend (Physics & AI)
+1. Open Google Colab and create a new notebook.
+2. Install dependencies: `!pip install stable-baselines3[extra] gymnasium pybullet websockets nest_asyncio`
+3. Train the AI (optional) or load a pre-trained `alpha_brain.zip` model.
+4. Run the Master Server script. 
+5. Copy the generated `wss://...trycloudflare.com` URL from the terminal output.
+
+### 2. The React Frontend (Dashboard)
+1. Clone this repository to your local machine or GitHub Codespaces.
+2. Navigate to the dashboard directory:
+   ```bash
+   cd swarm-dashboard
+   npm install
+   npm run dev
+Open the local host link in your browser.
+
+Paste the wss:// URL into the INITIALIZE UPLINK bar and connect.
+
+Open Foxglove Studio, connect to the same WebSocket, and subscribe to the 3D Pose and Camera channels.
+
+🎮 Controls & Operation
+📐 FORMATION V: Standard swarm takeoff and hovering pattern.
+
+🌪️ EVASIVE: Breaks formation and scatters the swarm to dodge incoming fire.
+
+🚀 AUTOPILOT: Uses A* pathfinding to navigate to the inputted X/Y coordinates.
+
+🎯 STRIKE TARGET: Engages the PyTorch Neural Network to autonomously hunt and neutralize the hostile drone.
+
+🛑 ABORT / RTB: Halts all actions, returns drones to a holding pattern, and refuels the swarm.
+
+MANUAL OVERRIDE: W, A, S, D, R (Rise), C (Crouch) for direct pilot control.
+
+🛡️ License
+Distributed under the MIT License. See LICENSE for more information.
