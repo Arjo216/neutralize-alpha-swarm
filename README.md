@@ -71,6 +71,7 @@ The architecture is divided into two distinct environments communicating via sec
 
    Bash
    git clone [https://github.com/YOUR-USERNAME/neutralize-alpha.git](https://github.com/YOUR-USERNAME/neutralize-alpha.git)
+   
    cd neutralize-alpha/swarm-dashboard
 2. Install Node dependencies and launch:
 
@@ -86,9 +87,9 @@ The tactical dashboard supports complete Human-in-the-Loop oversight.
 
 | Command | Action | Description |
 | :--- | :--- | :--- |
-|📐`[ FORMATION V ]`| *Formation* | Swarm locks into a synchronized V-formation and hovers at Z=5. |
+| `[ 📐 FORMATION V ]` | *Formation* | Swarm locks into a synchronized V-formation and hovers at Z=5. |
 | `[ 🌪️ EVASIVE ]` | *Evasive* | Injects randomized movement vectors to scatter the swarm and dodge incoming hostile fire. |
-| `[ AUTOPILOT ]` | *Autonomous Nav*| Engages the A* algorithm. The path is visually drawn in the 3D grid, and the swarm navigates to the target X/Y coordinates. |
+| `[ 🚀 AUTOPILOT ]` | *Autonomous Nav*| Engages the A* algorithm. The path is visually drawn in the 3D grid, and the swarm navigates to the target X/Y coordinates. |
 | `[ 🎯 STRIKE TARGET ]`| *AI Intercept* | Disengages the P-D math and activates the PyTorch Neural Network to autonomously hunt and ram the hostile target. |
 | `[ 🛑 ABORT / RTB ]` | *Halt / Refuel* | Swarm cuts engines, returns to a holding pattern, and rapidly replenishes the Fuel Gauge. |
 | `[ W, A, S, D ]` | *Translate* | Manual override to fly the Alpha drone Forward/Left/Back/Right. |
