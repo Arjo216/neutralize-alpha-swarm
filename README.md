@@ -71,6 +71,7 @@ The architecture is divided into two distinct environments communicating via sec
 
    ```bash
    git clone [https://https://github.com/Arjo216/neutralize-alpha-swarm](https://https://github.com/Arjo216/neutralize-alpha-swarm)
+
    cd neutralize-alpha/swarm-dashboard
 2. Install Node dependencies and launch:
 
