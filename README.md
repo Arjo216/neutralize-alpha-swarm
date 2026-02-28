@@ -69,15 +69,12 @@ The architecture is divided into two distinct environments communicating via sec
 ### Step 2: Boot the Command Center (Local)
 1. Clone this repository and access the React dashboard:
 
-   Bash
-   
+   ```bash
    git clone [https://https://github.com/Arjo216/neutralize-alpha-swarm](https://https://github.com/Arjo216/neutralize-alpha-swarm)
-
    cd neutralize-alpha/swarm-dashboard
 2. Install Node dependencies and launch:
 
-   Bash
-
+   ```bash
    npm install
 
    npm run dev
