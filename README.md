@@ -32,7 +32,7 @@ The architecture is divided into two distinct environments communicating via sec
 
 * **Headless Physics:** PyBullet calculates gravity, rotor thrust, inertia, and raycast collisions.
 * **The Neural Link:** A Proximal Policy Optimization (PPO) Deep Reinforcement Learning algorithm, trained over 50,000 episodes via `Stable Baselines 3`, assumes flight control during combat engagements.
-* **A* Pathfinding Autopilot:** A custom grid-search algorithm maps dynamic skyscrapers to calculate collision-free routing.
+* **A Pathfinding Autopilot:** A custom grid-search algorithm maps dynamic skyscrapers to calculate collision-free routing.
 * **Hostile FSM:** The enemy target operates on a Finite State Machine (`IDLE` -> `EVASIVE` -> `COMBAT`), dynamically reacting and returning fire based on the swarm's proximity.
 
 ### II. The C2 Frontend (React.js / Foxglove)
