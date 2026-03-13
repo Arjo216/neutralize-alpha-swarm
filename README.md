@@ -81,7 +81,64 @@ The architecture is divided into two distinct environments communicating via sec
    npm run dev
 3. Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure         handshake.
 
+---
+```mermaid
+graph TD
+    %% Define Styles for visual impact
+    classDef colab fill:#f96,stroke:#333,stroke-width:2px,color:white;
+    classDef network fill:#bbf,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+    classDef UI fill:#8f8,stroke:#333,stroke-width:2px;
+    classDef visualization fill:#ff9,stroke:#333,stroke-width:1px;
 
+    %% 🧠 BACKEND: Google Colab Environment (Physics & AI Engine)
+    subgraph Backend [Google Colab - Python Server]
+        direction TB
+        PyBullet[PyBullet Physics Engine<br/>(Headless Simulation)]:::colab
+        
+        subgraph AutonomousBrain [Swarm Intelligence]
+            AStar[A* Pathfinding<br/>Algorithm]:::colab
+            PyTorch[PyTorch PPO<br/>Neural Network]:::colab
+            FSM[Hostile AI<br/>Finite State Machine]:::colab
+        
+            PyBullet -->|Raycast Data| AStar
+            PyTorch -->|Kinetic Strike Actions| PyBullet
+            FSM -->|Evasive/Combat Actions| PyBullet
+        end
+        
+        WebSocketServer[Asyncio WebSocket Server<br/>(subprotocol: foxglove.websocket.v1)]:::network
+        
+        %% Telemetry Flow
+        PyBullet -->|XYZ, Fuel, Camera<br/>Lidar/Radar Alerts| WebSocketServer
+        AutonomousBrain -->|ROE, Path Data| WebSocketServer
+    end
+
+    %% 🔐 NETWORK LAYER: Secure Tunnel
+    Cloudflare[Cloudflare Secure Tunnel<br/>(wss:// URL)]:::network
+    WebSocketServer <==> Cloudflare
+
+    %% 🎮 FRONTEND: Tactical Command Center (Local Environment)
+    subgraph Frontend [Tactical Command Center]
+        direction LR
+        
+        ReactApp[React.js Tactical Dashboard]:::UI
+        Foxglove[Foxglove Studio]:::visualization
+        
+        %% User Inputs
+        ReactApp -->|W,A,S,D / Formation / Strike<br/>Autopilot Targets| Cloudflare
+        
+        %% Data Display
+        Cloudflare <==>|Binary JSON Payloads| ReactApp
+        Cloudflare ==>|3D Poses, Path Visuals<br/>Camera Feed| Foxglove
+        
+        subgraph DashboardComponents [Dashboard Components]
+            ReactApp -->|Live XYZ & Fuel| StatusGrid[Swarm Status Grid]:::UI
+            ReactApp -->|Target Acquired/Fire| Alerts[Priority Alert System]:::UI
+        end
+    end
+
+    %% Apply final styles
+    class Backend,Frontend network;
+```
 ### 🎮 COMMAND MATRIX Tactical Controls (CLI)
 
 The tactical dashboard supports complete Human-in-the-Loop oversight.
