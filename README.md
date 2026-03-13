@@ -82,6 +82,7 @@ The architecture is divided into two distinct environments communicating via sec
 3. Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure         handshake.
 
 ---
+
 ```mermaid
 graph TD
     %% Define Styles for visual impact
@@ -139,6 +140,7 @@ graph TD
     %% Apply final styles
     class Backend,Frontend network;
 ```
+
 ### 🎮 COMMAND MATRIX Tactical Controls (CLI)
 
 The tactical dashboard supports complete Human-in-the-Loop oversight.
