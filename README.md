@@ -85,61 +85,73 @@ The architecture is divided into two distinct environments communicating via sec
 
 ```mermaid
 graph TD
-    %% Define Styles for visual impact
-    classDef colab fill:#f96,stroke:#333,stroke-width:2px,color:white;
-    classDef network fill:#bbf,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
-    classDef UI fill:#8f8,stroke:#333,stroke-width:2px;
-    classDef visualization fill:#ff9,stroke:#333,stroke-width:1px;
+    %% Custom Black-Site Aesthetics
+    classDef ui fill:#020617,stroke:#00ffcc,stroke-width:2px,color:#fff;
+    classDef network fill:#1e293b,stroke:#f59e0b,stroke-width:2px,stroke-dasharray: 5 5,color:#fff;
+    classDef core fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff;
+    classDef ai fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff;
+    classDef hostile fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#fff;
 
-    %% 🧠 BACKEND: Google Colab Environment (Physics & AI Engine)
-    subgraph Backend [Google Colab - Python Server]
-        direction TB
-        PyBullet[PyBullet Physics Engine<br/>(Headless Simulation)]:::colab
-        
-        subgraph AutonomousBrain [Swarm Intelligence]
-            AStar[A* Pathfinding<br/>Algorithm]:::colab
-            PyTorch[PyTorch PPO<br/>Neural Network]:::colab
-            FSM[Hostile AI<br/>Finite State Machine]:::colab
-        
-            PyBullet -->|Raycast Data| AStar
-            PyTorch -->|Kinetic Strike Actions| PyBullet
-            FSM -->|Evasive/Combat Actions| PyBullet
-        end
-        
-        WebSocketServer[Asyncio WebSocket Server<br/>(subprotocol: foxglove.websocket.v1)]:::network
-        
-        %% Telemetry Flow
-        PyBullet -->|XYZ, Fuel, Camera<br/>Lidar/Radar Alerts| WebSocketServer
-        AutonomousBrain -->|ROE, Path Data| WebSocketServer
-    end
-
-    %% 🔐 NETWORK LAYER: Secure Tunnel
-    Cloudflare[Cloudflare Secure Tunnel<br/>(wss:// URL)]:::network
-    WebSocketServer <==> Cloudflare
-
-    %% 🎮 FRONTEND: Tactical Command Center (Local Environment)
-    subgraph Frontend [Tactical Command Center]
+    subgraph FRONTEND ["🖥️ TACTICAL COMMAND CENTER (Local)"]
         direction LR
-        
-        ReactApp[React.js Tactical Dashboard]:::UI
-        Foxglove[Foxglove Studio]:::visualization
-        
-        %% User Inputs
-        ReactApp -->|W,A,S,D / Formation / Strike<br/>Autopilot Targets| Cloudflare
-        
-        %% Data Display
-        Cloudflare <==>|Binary JSON Payloads| ReactApp
-        Cloudflare ==>|3D Poses, Path Visuals<br/>Camera Feed| Foxglove
-        
-        subgraph DashboardComponents [Dashboard Components]
-            ReactApp -->|Live XYZ & Fuel| StatusGrid[Swarm Status Grid]:::UI
-            ReactApp -->|Target Acquired/Fire| Alerts[Priority Alert System]:::UI
-        end
+        RD[⚛️ React.js Dashboard<br>UI / Fuel / Controls]
+        FG[🦊 Foxglove Studio<br>3D Grid / FPV Cam]
     end
 
-    %% Apply final styles
-    class Backend,Frontend network;
+    subgraph NETWORK ["🌐 ENCRYPTED UPLINK"]
+        direction TB
+        WS_CLIENT((WebSocket Client))
+        CF[☁️ Cloudflared Tunnel<br>wss://]
+        WS_SERVER((WebSocket Server<br>Foxglove v1))
+        
+        RD --> |Commands| WS_CLIENT
+        WS_CLIENT <==> |Binary JSON| CF
+        CF <==> |Stream| WS_SERVER
+        WS_CLIENT -.-> |Parses Telemetry| FG
+    end
+
+    subgraph BACKEND ["🦅 NEUTRALIZE ALPHA ENGINE (Google Colab)"]
+        direction TB
+        LOGIC[⚙️ Mission Logic Controller<br>State Machine]
+        
+        WS_SERVER --> |Decodes Input| LOGIC
+        
+        subgraph INTELLIGENCE ["🧠 COGNITIVE CORE"]
+            ASTAR[🗺️ A* Pathfinding<br>Obstacle Avoidance]
+            PPO[⚡ PyTorch PPO Brain<br>Deep RL Intercept]
+        end
+
+        subgraph PHYSICS ["🌍 PYBULLET SIMULATION"]
+            SWARM[🚁 Swarm Dynamics<br>P-D Flight Math]
+            SENSORS[📡 Lidar & Radar<br>Raycasting]
+            CAM[📷 FPV OpenCV<br>Base64 Encoder]
+            ENEMY[🎯 Hostile AI<br>FSM: Idle/Evade/Combat]
+        end
+
+        LOGIC --> |🚀 Autopilot| ASTAR
+        LOGIC --> |🎯 Strike| PPO
+        LOGIC --> |🕹️ Manual / 📐 Form| SWARM
+        
+        ASTAR --> |Waypoints| SWARM
+        PPO --> |Raw Thrust Vectors| SWARM
+        
+        SWARM <--> SENSORS
+        SWARM <--> CAM
+        ENEMY <--> |Proximity Triggers| SENSORS
+    end
+
+    %% Data Return Path
+    SENSORS --> |"Telemetry (X,Y,Z, Alerts, Fuel)"| WS_SERVER
+    CAM --> |"Encoded JPG Frame"| WS_SERVER
+
+    %% Apply Styles
+    class RD,FG ui;
+    class CF,WS_CLIENT,WS_SERVER network;
+    class LOGIC,SWARM,SENSORS,CAM core;
+    class ASTAR,PPO ai;
+    class ENEMY hostile;
 ```
+---
 
 ### 🎮 COMMAND MATRIX Tactical Controls (CLI)
 
