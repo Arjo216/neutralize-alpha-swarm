@@ -82,7 +82,7 @@ The architecture is divided into two distinct environments communicating via sec
 3. Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure         handshake.
 
 ---
-
+## 🏗️ System Architecture
 ```mermaid
 graph TD
     %% Custom Black-Site Aesthetics
