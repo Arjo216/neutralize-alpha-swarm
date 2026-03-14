@@ -54,34 +54,6 @@ The architecture is divided into two distinct environments communicating via sec
 | **Lethal Override** | Spatial Hitbox Detection | Physically neutralizes the enemy flight controller upon a 1.5m proximity breach. |
 
 ---
-
-## 🛠️ DEPLOYMENT PROTOCOL
-
-### Step 1: Initialize the Engine (Colab)
-1. Open a Google Colab notebook.
-2. Install the core dependencies:
-   ```bash
-   !pip install stable-baselines3[extra] gymnasium pybullet websockets nest_asyncio
-3. Run the Master Server script to generate the urban grid and train/load the alpha_brain.zip model.
-
-4. Extract the secure wss://...trycloudflare.com URL from the terminal uplink logs.
-
-### Step 2: Boot the Command Center (Local)
-1. Clone this repository and access the React dashboard:
-
-   ```bash
-   git clone [https://https://github.com/Arjo216/neutralize-alpha-swarm](https://https://github.com/Arjo216/neutralize-alpha-swarm)
-
-   cd neutralize-alpha/swarm-dashboard
-2. Install Node dependencies and launch:
-
-   ```bash
-   npm install
-
-   npm run dev
-3. Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure         handshake.
-
----
 ## 🏗️ System Architecture
 ```mermaid
 graph TD
@@ -151,6 +123,34 @@ graph TD
     class ASTAR,PPO ai;
     class ENEMY hostile;
 ```
+---
+
+## 🛠️ DEPLOYMENT PROTOCOL
+
+### Step 1: Initialize the Engine (Colab)
+1. Open a Google Colab notebook.
+2. Install the core dependencies:
+   ```bash
+   !pip install stable-baselines3[extra] gymnasium pybullet websockets nest_asyncio
+3. Run the Master Server script to generate the urban grid and train/load the alpha_brain.zip model.
+
+4. Extract the secure wss://...trycloudflare.com URL from the terminal uplink logs.
+
+### Step 2: Boot the Command Center (Local)
+1. Clone this repository and access the React dashboard:
+
+   ```bash
+   git clone [https://https://github.com/Arjo216/neutralize-alpha-swarm](https://https://github.com/Arjo216/neutralize-alpha-swarm)
+
+   cd neutralize-alpha/swarm-dashboard
+2. Install Node dependencies and launch:
+
+   ```bash
+   npm install
+
+   npm run dev
+3. Paste the Colab wss:// URL into the INITIALIZE UPLINK bar to establish the secure         handshake.
+
 ---
 
 ### 🎮 COMMAND MATRIX Tactical Controls (CLI)
